@@ -45,7 +45,6 @@ def arretProgramme():
 	while(boucleA):
 		repA = input("Pour quittez le progrmme entrez 'oui': ")
 		repA = repA.upper()
-		print(repA)
 
 		if(repA == "OUI"):
 			boucleA = False
@@ -69,7 +68,7 @@ while boucleC:
 		#x = x.encode()
 		#client.send(x)
 
-threadArretProgramme.stop()
+boucleA = False
 time.sleep(1)
 client.close()
 time.sleep(2)
