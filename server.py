@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-#import des lib time, serial, socket et threading
 import time
 import serial
 import socket
