@@ -1,16 +1,17 @@
+#!/usr/bin/env python3
 import socket
 import time
 import threading
-import pyserial
+import serial
 
-#ser = serial.Serial(
-#	port='COM9',
-#	baudrate = 2400,
-#       parity=serial.PARITY_EVEN,
-#       stopbits=serial.STOPBITS_ONE,
-#       bytesize=serial.SEVENBITS,
-#       timeout=None
-#)
+ser = serial.Serial(
+	port='/dev/pts/12',
+	baudrate = 2400,
+        parity=serial.PARITY_EVEN,
+        stopbits=serial.STOPBITS_ONE,
+        bytesize=serial.SEVENBITS,
+        timeout=None
+)
 
 numeroDePost = input("Entrez votre numéro de poste (ex: 154): ")
 ipServLinux = "192.168.10." + numeroDePost
@@ -21,18 +22,6 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.connect((hote, port))
 
 boucleC = True
-def receptionServer():
-	global server
-	global boucleC
-	while boucleC:
-		msgRecu = server.recv(4096)
-		msgRecu = msgRecu.decode()
-		if(msgRecu == "stopdeconnexion"):
-			boucleC = False
-		else:
-			pass
-			#ser.write(msgRecu)
-
 boucleA = True
 def arretProgramme():
         global boucleA
@@ -48,18 +37,19 @@ def arretProgramme():
                         global boucleC
                         boucleC = False
 
-threadReceptionServer = threading.Thread(target=receptionServer, args=())
-threadReceptionServer.start()
 threadArretProgramme = threading.Thread(target=arretProgramme, args=())
 threadArretProgramme.start()
 
 while boucleC:
-	pass
-	#if(ser.in_waiting > 0):
-                #Lecture du port serie
-                #x=ser.readline()
-                #x = x.encode()
-                #client.send(x)
+	msgRecu = server.recv(4096)
+	msgRecu = msgRecu.decode()
+
+	if(msgRecu == "stopdeconnexion"):
+        	boucleC = False
+	else:
+		ser.write(msgRecu.encode())
+		print(msgRecu)
 
 
+boucleA = False
 server.close()

@@ -5,14 +5,16 @@ import socket
 import threading
 
 #Configuration du port serie
-#ser = serial.Serial(
-#	port='/dev/ttyUSB0',
-#	baudrate = 2400,
-#	parity=serial.PARITY_EVEN,
-#	stopbits=serial.STOPBITS_ONE,
-#	bytesize=serial.SEVENBITS,
-#	timeout=None
-#)
+ser = serial.Serial(
+	port='/dev/pts/6',
+	baudrate = 2400,
+	parity=serial.PARITY_EVEN,
+	stopbits=serial.STOPBITS_ONE,
+	bytesize=serial.SEVENBITS,
+	timeout=None
+)
+
+ser.flushInput()
 
 #Configuration du socket
 hote = ''
@@ -33,9 +35,6 @@ def receptionClient():
 		msgRecu = msgRecu.decode()
 		if(msgRecu == "stopdeconnexion"):
 			boucleC = False
-		else:
-			pass
-			#ser.write(msgRecu)
 
 #Fonction du thread pour arreter le programme
 boucleA = True
@@ -61,12 +60,11 @@ threadArretProgramme.start()
 
 #Boucle recuperation des donnees sur le peripherique serie et envoie au client
 while boucleC:
-	pass
-	#if(ser.in_waiting > 0):
+	if(ser.in_waiting > 0):
 		#Lecture du port serie
-		#x=ser.readline()
-		#x = x.encode()
-		#client.send(x)
+		x=ser.readline()
+		client.send(x)
+		print(x.decode())
 
 boucleA = False
 time.sleep(1)
